@@ -72,11 +72,13 @@ class Request extends LarryRequest
      */
     public function rules()
     {
-        if(!empty($this->validations)){
-            return $this->validations;
-        }
 
-        return $this->with()->validations;
+        return $this->validations;
+        // if(!empty($this->validations)){
+        //     return $this->validations;
+        // }
+
+        // return $this->with()->validations;
     }
 
     protected function getRules($rules = null){
@@ -122,11 +124,16 @@ class Request extends LarryRequest
         if($validator->fails()){
             return $this->failedValidation($validator);
         }
-        return $validator->validate($this->rules());
+        $payload = $validator->validate($this->rules());
+        if(endpoint()->action == 'index'){ 
+            $payload['order_by'] = FindOrDefault('order_by',$payload,'created_at');
+            $payload['per_page'] = FindOrDefault('per_page',$payload,15);
+        }
+        return $payload;
     }
 
     protected function data(){
-        $data = $this->all();
+        $data = $this->with()->all();
         foreach($this->encrypted as $key){
             if(array_key_exists($key,$data)){
                 $data[$key] =  rsa($this->decryptionKey)->decrypt($data[$key]);

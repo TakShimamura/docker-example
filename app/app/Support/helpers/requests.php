@@ -1,9 +1,35 @@
 <?php 
+if (!function_exists('GiveFile')) {
+    function GiveFile($type, $file)
+    {
+        $path = resource_path("$type/$file");
+        $file = \File::get($path);
+        $type = \File::mimeType($path);
+        $response = \Response::make($file, 200);
+        $response->header('Content-Type', $type);
+        return $response;
+    }
+}
 
+if(!function_exists('subject')){
+    function subject(){
+        return config('subject');
+    }
+}
 
 if(!function_exists('endpoint')){
     function endpoint($type='api'){
         return new \App\Support\Facades\Endpoint(app()->request,$type);
+    }
+}
+
+
+if(!function_exists('respond')){
+    function respond($data,int $status = 200){
+        return response()->json(
+            payload($data), 
+            $status
+        );
     }
 }
 
@@ -14,6 +40,7 @@ if(!function_exists('payload')){
             $data = $object->items();
             $response['total'] = $object->count();
             $response['page'] = $object->currentPage();
+            $response['per_page'] = $object->perPage();
         } else { $data = $object; }
         $response['data'] = $data;
         $response['type'] = gettype($data);
@@ -32,7 +59,7 @@ if(!function_exists('FindOrAbort')){
 if(!function_exists('AbortOnFail')){
     function AbortOnFail($attempt){
         if($attempt instanceof \Exception){
-            AbortRequest(error([$attempt->getMessage()]));
+            AbortRequest([$attempt->getMessage()]);
         }
         return $attempt;
     }
@@ -59,6 +86,6 @@ if(!function_exists('AbortOnFind')){
 
 if(!function_exists('AbortRequest')){
     function AbortRequest(array $errors=null,$httpCode=400){
-        throw resolve(contract('RenderableException'),['errors'=>$errors,'httpCode'=>$httpCode]);
+        throw contract('RenderableException',['errors'=>$errors,'httpCode'=>$httpCode]);
     }
 }

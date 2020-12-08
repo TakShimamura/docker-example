@@ -50,6 +50,9 @@ class Endpoint {
         }
 
         $this->action = \Route::currentRouteAction();
+        $pattern = "/[a-zA-Z0-9_\\\\]*@/";
+
+        $this->action = preg_replace($pattern,'',$this->action);
         return $this;
     }
 
@@ -60,9 +63,11 @@ class Endpoint {
         }   
 
         // $pathPattern = "/$this->type\/[a-zA-Z0-9_]*/";
-        $pattern = "/[a-zA-Z0-9_\\\\]*@/";
+        // $pattern = "/[a-zA-Z0-9_\\\\]*@/";
 
-        $this->rule = config('subject').'-'.preg_replace($pattern,'',$this->action);
+        // $this->action = preg_replace($pattern,'',$this->action);
+
+        $this->rule = config('subject').'-'.$this->action;
         return $this;
     }
 
@@ -71,6 +76,9 @@ class Endpoint {
             $rule = $this->rule;
         }
         $rules = config("requests.rules.$rule"); 
+        if(empty($rules) && strtolower($this->action) == 'index'){
+            return config('requests.rules.index');
+        }
         if(gettype($rules) == 'string'){
             return $this->rules($rules);
         }

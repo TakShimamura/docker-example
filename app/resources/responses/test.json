@@ -1,0 +1,12 @@
+{
+    "type":"object",
+    "subject":"test",
+    "data":{
+        "sample": "string",
+        "test":{
+            "name":"object",
+            "type":"test"
+        },
+        "array":[1,2,3]
+    }
+}

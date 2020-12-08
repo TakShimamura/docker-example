@@ -28,4 +28,19 @@ class Controller extends BaseController
         }
         return $this->subject;
     }
+
+    public function find($record){
+        if(gettype($record) == 'object'){
+            return $record;
+        }
+
+        $model = contract(subject());
+
+        return FindOrAbort(
+            $model->find($record),
+            ['No record found.'],
+            404
+        );
+    
+    }
 }

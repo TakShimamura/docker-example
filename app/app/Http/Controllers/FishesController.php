@@ -10,37 +10,14 @@ use Illuminate\Http\Request as LarryRequest;
 class FishesController extends Controller
 {
     //
-
     protected $subject = 'fish';
-
-    public $rules = [
-        'create' => [
-            'validations' => [
-                'name' => ['required','string','min:4'],
-                'age' => ['required','string','min:4'],
-                'breed' => ['required','string','min:4']
-            ],
-            'normalizations' => [
-                'name' => ['trim'],
-                'breed' => ['strtoupper'],
-            ],
-            'decrypt' => [
-                'key' => '1k',
-                'fields' => [
-                    'breed'
-                ]
-            ]
-        ],
-    ];
-
 
     public function create(Request $request){
         $user = $request->user();
-        $payload = $request
-            ->with($this->rules['create'])
-            ->validate();
 
-        return $payload;
+        $payload = $request->validate();
+
+        $payload['type_id'] = \App\Models\FishType::find(1)->id;
 
         $fish = $user->fishes()->create($payload);
 
@@ -57,8 +34,8 @@ class FishesController extends Controller
             404
         );
 
-        return response()->json(
-            payload($fish),
+        return respond(
+            $fish,
             200
         );
     }
@@ -66,8 +43,13 @@ class FishesController extends Controller
     public function index(Request $request){
         $user = $request->user();
 
-        return response()->json(
-            payload($user->fishes()->paginate()),
+        $payload = $request->validate();
+
+        return respond(
+            $user->fishes()
+            ->with('type')
+            ->orderBy($payload['order_by'])
+            ->paginate($payload['per_page']),
             200
         );
     }

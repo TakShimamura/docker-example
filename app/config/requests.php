@@ -2,6 +2,12 @@
 
 return [
     'rules' => [
+        'index' => [
+            'validations' => [
+                'per_page' => ['nullable','numeric'],
+                'order_by' => ['nullable','string'],
+            ],
+        ],
         'fish-create' => [
             'validations' => [
                 'name' => ['required','string','min:4'],

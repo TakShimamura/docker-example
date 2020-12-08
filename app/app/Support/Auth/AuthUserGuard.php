@@ -67,7 +67,7 @@ class AuthUserGuard implements Guard
      * @return bool
      */
     public function validate(array $credentials = []){
-        if(!isProduction() && FindOrDefault('fingerprint',$credentials) == 'sample'){ return true; }
+        if($this->isSample($credentials)){ return true; }
         $ip = $this->request->ip();
         $userAgent = $this->request->userAgent();
         $fingerprint = $this->request->header(config('services.auth.fingerprint'));
@@ -77,6 +77,15 @@ class AuthUserGuard implements Guard
             && $userAgent == FindOrDefault('user_agent',$credentials)
             && $fingerprint == FindOrDefault('fingerprint',$credentials)
         );
+    }
+
+
+
+    
+    public function isSample(array $credentials = []){
+        if(!isProduction() && FindOrDefault('fingerprint',$credentials) == 'sample'){ 
+            return true; 
+        }
     }
 
 }

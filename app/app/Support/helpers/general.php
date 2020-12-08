@@ -11,32 +11,39 @@ if(!function_exists('found')){
 
 if(!function_exists('Attempt')){
     function Attempt($function,$object=null,$payload=[]){
-        return resolve(contract('Attempt'),['function' => $function, 'object' => $object,'payload' => $payload]);
+        return contract('Attempt',['function' => $function, 'object' => $object,'payload' => $payload]);
     }
 }
 
 if(!function_exists('rsa')){
     function rsa(){
-        return resolve(contract('RSA'));
+        return contract('RSA');
     }
 }
 
 if(!function_exists('jwt')){
     function jwt(){
-        return resolve(contract('JWT'));
+        return contract('JWT');
     }
 }
 
 // TODO
 if(!function_exists('contract')){
-    function contract(string $name, string $namespace='App\\Contracts\\') {
-        return $namespace.$name;
+    function contract(string $name, array $params = [], string $namespace='App\\Contracts\\') {
+        try{
+            return resolve(
+                spaceybaseychickenfacey().'Contracts\\'.ucfirst($name),
+                $params
+            );
+        }catch(\Exception $ex){
+            return null;
+        }
     }
 }
 
 if(!function_exists('controller')){
     function controller(string $name) {
-        return spaceybaseychickenfacey().'Http\\Controllers\\'.$name.'Controller';
+        return spaceybaseychickenfacey().'Http\\Controllers\\'.ucfirst($name).'Controller';
     }
 }
 
