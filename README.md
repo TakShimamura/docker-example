@@ -71,6 +71,9 @@ Most configuration can be modified in the .env file of this projects root direct
         - ex: ```127.0.0.1 dieselapi.net```
     - 2.b Add this as well for local development purposes:
       - ex: ```127.0.0.1 postgres```
+    - 2.c Add a custom ```DOCKER_CONTAINER_PREFIX``` for example ```vin```.
+    - 2.d In  nginx/siteconfig.conf change ```fastcgi_pass php:9000;``` to your container name with it's prefix. 
+      - ex: ```fastcgi_pass vin-php:9000;```
 3. If you choose to modify your postgres db credentials you can modify them in the .env file under the DOCKER_POSTGRES_* environment variables.
 4. By default Nginx will look for your project file according to the root declaration in the Nginx site configuration file located in ```./nginx/siteconfig.conf``` file. 
     - If you are building a laravel application be sure to change the path of the root inside the nginx site configuration file to the path of your laravel project. 
