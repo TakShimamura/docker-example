@@ -11,10 +11,10 @@ return [
     ],
     'version' => 'default',
     'versions' => [
-        'default' => [ 
+        'default' => [
             'namespace' => 'App\\',
         ],
-        'v1' => [ 
+        'v1' => [
             'namespace' => 'App\\V1\\',
         ],
     ],
@@ -192,6 +192,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\DieselGuardianServiceProvider::class,
 
     ],
 
@@ -244,6 +245,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Guardian' => App\Services\Auth\DieselGaurdian::class,
 
     ],
 

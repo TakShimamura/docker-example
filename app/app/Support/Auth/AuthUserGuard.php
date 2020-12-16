@@ -19,6 +19,7 @@ class AuthUserGuard implements Guard
     public function __construct(UserProvider $provider, $request){
         $this->provider = $provider;
         $this->request = $request;
+        
     }
 
     public function getRequestCredentials(){

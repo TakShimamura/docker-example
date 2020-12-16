@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Requests;
-
 use Auth;
 use  Illuminate\Foundation\Http\FormRequest as LarryRequest;
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
@@ -125,7 +124,7 @@ class Request extends LarryRequest
             return $this->failedValidation($validator);
         }
         $payload = $validator->validate($this->rules());
-        if(endpoint()->action == 'index'){ 
+        if(endpoint()->action == 'index'){
             $payload['order_by'] = FindOrDefault('order_by',$payload,'created_at');
             $payload['per_page'] = FindOrDefault('per_page',$payload,15);
         }

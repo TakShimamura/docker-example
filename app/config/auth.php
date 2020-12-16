@@ -42,7 +42,7 @@ return [
         ],
 
         'api' => [
-            'driver' => \App\Support\Auth\AuthUserGuard::class,
+            'driver' => 'Guardian',
             'provider' => 'auth-token-users',
         ],
     ],
